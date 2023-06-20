@@ -1,7 +1,8 @@
 #include <cstdlib>
 
 #include "../state/state.hpp"
-#include "./minimax.hpp"
+#include "./submission.hpp"
+
 
 /**
  * @brief Randomly get a legal action
@@ -10,14 +11,14 @@
  * @param depth You may need this for other policy
  * @return Move 
  */
-Move Minimax::get_move(State *state, int depth){
+Move Submission::get_move(State *state, int depth){
   state->get_legal_actions();
   
   int maxval = -2e9;
   auto actions = state->legal_actions;
   Move nextmove;
   for(auto it : actions){
-    int val = minimax(state->next_state(it), depth - 1, 0);
+    int val = alphabeta(state->next_state(it), depth - 1, -2e9, 2e9, 0);
     if(val > maxval){
         maxval = val;
         nextmove = it;
@@ -26,7 +27,7 @@ Move Minimax::get_move(State *state, int depth){
   return nextmove;
 }
 
-int Minimax::minimax(State * node, int depth, int maximizingPlayer){
+int Submission::alphabeta(State * node, int depth, int alpha, int beta, int maximizingPlayer){
     if(!depth && !maximizingPlayer) return node->evaluate();
     if(!depth && maximizingPlayer) return - node->evaluate();
 
@@ -38,16 +39,20 @@ int Minimax::minimax(State * node, int depth, int maximizingPlayer){
     if(maximizingPlayer){
         int maxval = -2e9;
         for(auto it : actions){
-            int val = minimax(node->next_state(it), depth - 1, 0);
+            int val = alphabeta(node->next_state(it), depth - 1, alpha, beta, 0);
             if(val > maxval) maxval = val;
+            if(maxval > alpha) alpha = maxval;
+            if(alpha >= beta) break;
         }
         return maxval;
     }else{
         int minval = 2e9;
         for(auto it : actions){
-            int val = minimax(node->next_state(it), depth - 1, 1);
-            if(val < minval) minval = val;
+            int val = alphabeta(node->next_state(it), depth - 1, alpha, beta, 1);
+            if(beta < minval) minval = beta;
+            if(val < beta) beta = val;
+            if(beta <= alpha) break;
         }
-        return minval;
+        return beta;
     }
 }

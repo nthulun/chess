@@ -12,7 +12,8 @@
  * @return int 
  */
 
-int value[] = {0, 1, 5, 10, 20, 50, 10000};
+int value[] = {0, 10, 35, 35, 35, 100, 1200000};
+// pawn, rook, knight, bishop, queen, king
 
 int State::evaluate(){
   // [TODO] design your own evaluation function
@@ -22,9 +23,75 @@ int State::evaluate(){
     for(int j = 0; j < 5; j++){
       total += value[board.board[!player][i][j]];
       total -= value[board.board[player][i][j]];
+  
+      if(player){
+        if(i >= 2)
+          switch(board.board[player][i][j]){
+            case 1:
+              total -= 3 * (i - 1);
+              break;
+            case 3:
+              total -= 5;
+              break;
+            case 4:
+              total -= 10;
+              break;
+            default:
+              total -= 0;
+          }
+        if(i <= 4){
+          switch(board.board[!player][i][j]){
+            case 1:
+              total += 3 * (5 - i);
+              break;
+            case 3:
+              total += 5;
+              break;
+            case 4:
+              total += 10;
+              break;
+            default:
+              total += 0;
+          }
+        }
+      }else{
+        if(player){
+          if(i >= 2)
+            switch(board.board[player][i][j]){
+              case 1:
+                total += 3 * (i - 1);
+                break;
+              case 3:
+                total += 5;
+                break;
+              case 4:
+                total += 10;
+                break;
+              default:
+                total += 0;
+            }
+          if(i <= 4){
+            switch(board.board[!player][i][j]){
+              case 1:
+                total -= 3 * (5 - i);
+                break;
+              case 3:
+                total -= 5;
+                break;
+              case 4:
+                total -= 10;
+                break;
+              default:
+                total -= 0;
+            }
+          }
+        }
+      }
+      
     }
   }
-
+  if(total > 1000000) return 1e9;
+  if(total < -1000000) return -1e9;
   return total;
 }
 

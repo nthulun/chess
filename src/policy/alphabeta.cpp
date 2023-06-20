@@ -14,11 +14,11 @@
 Move AlphaBeta::get_move(State *state, int depth){
   state->get_legal_actions();
   
-  int maxval = -1e9;
+  int maxval = -2e9;
   auto actions = state->legal_actions;
   Move nextmove;
   for(auto it : actions){
-    int val = alphabeta(state->next_state(it), depth, -1e9, 1e9, 0);
+    int val = alphabeta(state->next_state(it), depth - 1, -2e9, 2e9, 0);
     if(val > maxval){
         maxval = val;
         nextmove = it;
@@ -28,15 +28,16 @@ Move AlphaBeta::get_move(State *state, int depth){
 }
 
 int AlphaBeta::alphabeta(State * node, int depth, int alpha, int beta, int maximizingPlayer){
-    if(!depth) return node->evaluate();
+    if(!depth && !maximizingPlayer) return node->evaluate();
+    if(!depth && maximizingPlayer) return - node->evaluate();
 
-    node->get_legal_actions();
-    if(!node->legal_actions.size()) return node->evaluate();
+    if(!node->legal_actions.size() && !maximizingPlayer) return node->evaluate();
+    if(!node->legal_actions.size() && maximizingPlayer) return - node->evaluate();
 
     auto actions = node->legal_actions;
 
     if(maximizingPlayer){
-        int maxval = -1e9;
+        int maxval = -2e9;
         for(auto it : actions){
             int val = alphabeta(node->next_state(it), depth - 1, alpha, beta, 0);
             if(val > maxval) maxval = val;
@@ -45,7 +46,7 @@ int AlphaBeta::alphabeta(State * node, int depth, int alpha, int beta, int maxim
         }
         return maxval;
     }else{
-        int minval = 1e9;
+        int minval = 2e9;
         for(auto it : actions){
             int val = alphabeta(node->next_state(it), depth - 1, alpha, beta, 1);
             if(beta < minval) minval = beta;
