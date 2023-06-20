@@ -55,39 +55,36 @@ int State::evaluate(){
           }
         }
       }else{
-        if(player){
-          if(i >= 2)
-            switch(board.board[player][i][j]){
-              case 1:
-                total += 3 * (i - 1);
-                break;
-              case 3:
-                total += 5;
-                break;
-              case 4:
-                total += 10;
-                break;
-              default:
-                total += 0;
-            }
-          if(i <= 4){
-            switch(board.board[!player][i][j]){
-              case 1:
-                total -= 3 * (5 - i);
-                break;
-              case 3:
-                total -= 5;
-                break;
-              case 4:
-                total -= 10;
-                break;
-              default:
-                total -= 0;
-            }
+        if(i >= 2)
+          switch(board.board[!player][i][j]){
+            case 1:
+              total += 3 * (i - 1);
+              break;
+            case 3:
+              total += 5;
+              break;
+            case 4:
+              total += 10;
+              break;
+            default:
+              total += 0;
+          }
+        if(i <= 4){
+          switch(board.board[player][i][j]){
+            case 1:
+              total -= 3 * (5 - i);
+              break;
+            case 3:
+              total -= 5;
+              break;
+            case 4:
+              total -= 10;
+              break;
+            default:
+              total -= 0;
           }
         }
       }
-      
     }
   }
   if(total > 1000000) return 1e9;

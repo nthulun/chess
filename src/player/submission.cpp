@@ -40,7 +40,7 @@ void read_board(std::ifstream& fin) {
  */
 void write_valid_spot(std::ofstream& fout) {
   // Keep updating the output until getting killed.
-  for(int i = 1; i <= 15; i++) {
+  for(int i = 1; i <= 20; i++) {
     // Choose a random spot.
     auto move = Submission::get_move(root, i);
     fout << move.first.first << " " << move.first.second << " "\
