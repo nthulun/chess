@@ -11,9 +11,21 @@
  * 
  * @return int 
  */
+
+int value[] = {0, 1, 5, 10, 20, 50, 10000};
+
 int State::evaluate(){
   // [TODO] design your own evaluation function
-  return 0;
+  int total = 0;
+
+  for(int i = 0; i < 6; i++){
+    for(int j = 0; j < 5; j++){
+      total += value[board.board[!player][i][j]];
+      total -= value[board.board[player][i][j]];
+    }
+  }
+
+  return total;
 }
 
 

@@ -469,9 +469,11 @@ int main(int argc, char** argv) {
     }else{
       temp = game.next_state(action);
       std::cout << "Depth: " << total << std::endl;
+      std::cout << "Player " << game.player + 1 << std::endl;
       std::cout << x_axis[action.first.second] << y_axis[action.first.first] << " → " \
                 << x_axis[action.second.second] << y_axis[action.second.first] << "\n";
       log << "Depth: " << total << std::endl;
+      log << game.player + 1 << std::endl;
       log << x_axis[action.first.second] << y_axis[action.first.first] << " → " \
           << x_axis[action.second.second] << y_axis[action.second.first] << "\n";
     }
