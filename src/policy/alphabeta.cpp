@@ -18,7 +18,7 @@ Move AlphaBeta::get_move(State *state, int depth){
   auto actions = state->legal_actions;
   Move nextmove;
   for(auto it : actions){
-    int val = alphabeta(state->next_state(it), depth - 1, -2e9, 2e9, 0);
+    int val = alphabeta(state->next_state(it), depth - 1, maxval, 2e9, 0);
     if(val > maxval){
         maxval = val;
         nextmove = it;
@@ -49,8 +49,8 @@ int AlphaBeta::alphabeta(State * node, int depth, int alpha, int beta, int maxim
         int minval = 2e9;
         for(auto it : actions){
             int val = alphabeta(node->next_state(it), depth - 1, alpha, beta, 1);
-            if(beta < minval) minval = beta;
-            if(val < beta) beta = val;
+            if(val < minval) minval = val;
+            if(minval < beta) beta = minval;
             if(beta <= alpha) break;
         }
         return beta;
